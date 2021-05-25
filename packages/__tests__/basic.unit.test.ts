@@ -1,4 +1,4 @@
-import { App, Stack, Construct, Custom, Plugins } from "../core";
+import { App, Stack, Construct, Custom, Plugins } from "../";
 // import { LambdaFunction } from "@serverlesscdk/aws-lambda";
 // import { Provider } from "@serverlesscdk/sls-provider";
 // import { PolicyStatement } from "@serverlesscdk/aws-iam";
