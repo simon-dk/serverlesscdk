@@ -1,1 +1,1 @@
-export * from "./lib/lambda";
+export * as aws_lambda from "./lib/lambda";

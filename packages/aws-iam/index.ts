@@ -1,1 +1,1 @@
-export * from "./lib/policy-statement";
+export * as aws_iam from "./lib/policy-statement";
