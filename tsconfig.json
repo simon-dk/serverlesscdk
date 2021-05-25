@@ -24,5 +24,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["packages"]
+  "include": ["packages"],
+  "exclude": ["**/__tests__"]
 }
