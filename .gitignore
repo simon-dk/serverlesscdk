@@ -1,0 +1,12 @@
+# Dev folders
+.out
+.temp
+lib
+build
+examples
+
+# Modules
+node_modules
+
+# Random files
+.DS_Store
