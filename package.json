@@ -9,7 +9,8 @@
     "test": "jest",
     "clean": "rimraf lib",
     "prebuild": "yarn clean",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "yarn build"
   },
   "dependencies": {
     "constructs": "^10.0.0",

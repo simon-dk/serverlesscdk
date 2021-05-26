@@ -24,6 +24,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["packages"],
+  "include": ["packages", "./*.ts"],
   "exclude": ["**/__tests__"]
 }
