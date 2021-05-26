@@ -16,7 +16,7 @@ export abstract class BaseResource extends Construct {
     const validatedObject = BaseResource.validateObject(object);
 
     return Object.keys(validatedObject).filter((key) => {
-      // Dont return propertykey for "node" object or private properties (starting with "_MyObject": {} )
+      // Dont return keys for "node" object or private properties, e.g. starting with "_MyObject": {} 
       if (key === "node") return false;
       if (key.slice(0, 1) === "_") return false;
       const checkForNullValues = validatedObject[key] != null;
