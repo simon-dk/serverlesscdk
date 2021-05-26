@@ -6,11 +6,11 @@
   "author": "Simon Saxtorph",
   "license": "MIT",
   "scripts": {
-    "__test": "jest",
-    "__clean": "rimraf lib build",
-    "__prebuild": "npm run clean",
-    "__build": "tsc",
-    "__prepublishOnly": "npm run build && npm run test"
+    "test": "jest",
+    "clean": "rimraf lib build",
+    "prebuild": "yarn clean",
+    "build": "tsc",
+    "prepublishOnly": "yarn run build && yarn run test"
   },
   "dependencies": {
     "constructs": "^10.0.0",
