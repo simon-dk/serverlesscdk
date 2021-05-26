@@ -12,6 +12,8 @@ AWS CDK is an amazing software suite. But it is also very complex, and althoug i
 Serverless Framework on the other hand has ALMOST perfected the way we create Serverless systems. With quick deployments and sane defaults to many services. But Serverless Framework is limited. Writing stacks in yml is dreadfull for many,
 and although serverless can handle .js and .ts files, you dont get much help or typesafety out of the box. ServerlessCDK is a way for developers to create Stacks using Serverless Framework, but written with reusable constructs, just like CDK.
 
+For lambda function we use esbundle for an easy build/deploy workflow.
+
 ## Get started with ServerlessCDK
 
 ```console
@@ -24,6 +26,7 @@ In your serverless.ts file you can create a new stack like this:
 ```ts
 import { App, Stack, Construct, Provider, Region } from "serverlesscdk"
 import { aws_lambda as lambda } from "serverlesscdk"
+
 export class MyService extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
