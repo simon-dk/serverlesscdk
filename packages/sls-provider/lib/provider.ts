@@ -1,5 +1,5 @@
-import { Construct, BaseResource, Region } from "@serverlesscdk/core";
-import { PolicyStatement } from "@serverlesscdk/aws-iam";
+import { Construct, BaseResource, Region } from "../..";
+import { PolicyStatement } from "../../aws-iam";
 import {
   DeploymentBucket,
   DeploymentBucketProps,

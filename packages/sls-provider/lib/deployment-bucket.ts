@@ -1,4 +1,4 @@
-import { Construct, BaseResource } from "@serverlesscdk/core";
+import { Construct, BaseResource } from "../../";
 
 export interface IDeploymentBucket {
   blockPublicAccess?: boolean; //true # Prevents public access via ACLs or bucket policies. Default is false

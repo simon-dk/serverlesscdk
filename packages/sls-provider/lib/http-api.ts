@@ -1,4 +1,4 @@
-import { Construct, BaseResource } from "@serverlesscdk/core";
+import { Construct, BaseResource } from "../../";
 import { CustomLambdaAuthorizer, CustomLambdaAuthorizerProps } from ".";
 
 export interface HttpApiProps {

@@ -1,4 +1,4 @@
-import { Construct, BaseResource } from "@serverlesscdk/core";
+import { Construct, BaseResource } from "../../";
 
 export interface PackageProps {
   readonly patterns?: string[];

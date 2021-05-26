@@ -1,4 +1,4 @@
-import { Construct, Resource } from "@serverlesscdk/core";
+import { Construct, Resource } from "../..";
 import { Bundling } from "./bundle";
 
 type Tags = any;

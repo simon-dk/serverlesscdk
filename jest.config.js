@@ -4,7 +4,7 @@ module.exports = {
     "^.+\\.tsx?$": "ts-jest",
   },
 
-  moduleNameMapper: {
-    "@serverlesscdk/(.*)": "<rootDir>/packages/$1",
-  },
+  // moduleNameMapper: {
+  //   "@serverlesscdk/(.*)": "<rootDir>/packages/$1",
+  // },
 };
