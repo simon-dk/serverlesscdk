@@ -90,7 +90,7 @@ export class Function extends Resource implements IFunction {
     id = `${id}LambdaFunction`;
     super(scope, id);
 
-    this.name = props.name;
+    this.name = props.name; //does this conflict with id?
     this.description = props.description;
     this.memorySize = props.memorySize;
     this.reservedConcurrency = props.reservedConcurrency;
