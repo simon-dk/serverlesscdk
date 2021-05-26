@@ -12,4 +12,17 @@ describe("Lambda Unit Tests", () => {
 
     expect(lambda.environment.AWS_NODEJS_CONNECTION_REUSE_ENABLED).toBe("1");
   });
+
+  test("Function name should not contain LambdaFunction", () => {
+    const app = new App();
+    const stack = new Stack(app, "mystack");
+    const lambda = new Function(stack, "mylambda", {
+      runtime: "nodejs14.x",
+      handler: "custom/handler",
+    });
+
+    expect("mylambda" in lambda.synth().functions).toBe(true);
+    expect("mylambdaLambdaFunction" in lambda.synth().functions).toBe(false);
+    expect(lambda.logicalId).toBe("mylambdaLambdaFunction");
+  });
 });

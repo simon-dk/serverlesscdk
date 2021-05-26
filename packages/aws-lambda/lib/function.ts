@@ -86,10 +86,15 @@ export class Function extends Resource implements IFunction {
   public readonly image?: string;
   public readonly handler: string;
 
-  constructor(scope: Construct, id: string, props: FunctionProps) {
-    id = `${id}LambdaFunction`;
-    super(scope, id);
+  // Because Serverless appends "LambdaFunction" to all names, we save the
+  // original Id as a private property.
+  private readonly _serverlessId: string;
 
+  constructor(scope: Construct, id: string, props: FunctionProps) {
+    const logicalId = `${id}LambdaFunction`;
+    super(scope, logicalId);
+
+    this._serverlessId = id;
     this.name = props.name; //does this conflict with id?
     this.description = props.description;
     this.memorySize = props.memorySize;
@@ -138,6 +143,7 @@ export class Function extends Resource implements IFunction {
   }
 
   synth() {
-    return { functions: { [this.logicalId]: this.synthResource() } };
+    //We use _serverlessId to avoid functions named "getUserLambdaFunctionLambdaFunction"
+    return { functions: { [this._serverlessId]: this.synthResource() } };
   }
 }
