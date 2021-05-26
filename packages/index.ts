@@ -1,7 +1,7 @@
-export * from "./core/lib";
+export * from "./core";
 export * from "./sls-custom";
 export * from "./sls-plugins";
 export * from "./sls-package";
-export * from "./sls-provider/lib";
-export * from "./aws-iam/lib";
-export * from "./aws-lambda/lib";
+export * from "./sls-provider";
+export * as aws_iam from "./aws-iam";
+export * as aws_lambda from "./aws-lambda";

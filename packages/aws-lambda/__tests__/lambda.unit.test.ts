@@ -1,4 +1,5 @@
-import { LambdaFunction, App, Stack } from "../../";
+import { App, Stack } from "../../";
+import { LambdaFunction } from "../";
 
 describe("Lambda Unit Tests", () => {
   test("When runtime is nodejs and there is no env added", () => {
