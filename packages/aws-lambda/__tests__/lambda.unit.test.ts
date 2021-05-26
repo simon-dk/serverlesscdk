@@ -1,11 +1,11 @@
 import { App, Stack } from "../../";
-import { LambdaFunction } from "../";
+import { Function } from "../";
 
 describe("Lambda Unit Tests", () => {
   test("When runtime is nodejs and there is no env added", () => {
     const app = new App();
     const stack = new Stack(app, "mystack");
-    const lambda = new LambdaFunction(stack, "mylambda", {
+    const lambda = new Function(stack, "mylambda", {
       runtime: "nodejs14.x",
       handler: "custom/handler",
     });
