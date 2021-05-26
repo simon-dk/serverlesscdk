@@ -18,39 +18,46 @@ For lambda function we use esbundle for an easy build/deploy workflow.
 
 ```console
 $ mkdir my-service
+Create folder
 $ cd my-service
-$ cdk touch serverless.ts
+Cd into folder
+$ touch serverless.ts
+Create entryfile. Should always be serverless.ts
 ```
+
 In your serverless.ts file you can create a new stack like this:
 
 ```ts
-import { App, Stack, Construct, Provider, Region } from "serverlesscdk"
-import { aws_lambda as lambda } from "serverlesscdk"
+import { App, Stack, Construct, Provider, Region } from "serverlesscdk";
+import { aws_lambda as lambda } from "serverlesscdk";
 
 export class MyService extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    new Provider(this, { region: Region.EU_CENTRAL_1 })
+    new Provider(this, { region: Region.EU_CENTRAL_1 });
     new lambda.Function(this, "myLambda", {
-        runtime: "nodejs14.x",
-        entryfile: __dirname + "/handler.ts",
-        handler: "handler",
-        package: { individually: true, patterns: ["build/my-lambdaLambdaFunction/*"] },
-    })
+      runtime: "nodejs14.x",
+      entryfile: __dirname + "/handler.ts",
+      handler: "handler",
+      package: { individually: true, patterns: ["build/my-lambdaLambdaFunction/*"] },
+    });
   }
 }
 
-const app = new App()
-new MyService(app, "MyStack")
+const app = new App();
+new MyService(app, "MyStack");
 
-export = app.synth()
+export = app.synth();
 ```
+
 With the structure above you can now run:
 
 ```console
 $ serverless deploy
+Deploys service with serverless
 ```
+
 app.synth() will synthesize a json template that Serverless then deploys. You can use all regular serverless commands.
 
 ## Wanna help out?
