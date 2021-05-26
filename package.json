@@ -10,7 +10,7 @@
     "clean": "rimraf lib",
     "prebuild": "yarn clean",
     "build": "tsc",
-    "prepublish": "yarn build"
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "constructs": "^10.0.0",
