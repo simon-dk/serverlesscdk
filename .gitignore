@@ -1,9 +1,9 @@
 # Dev folders
-.out
-.temp
-lib
-build
-examples
+.out/*
+*temp/*
+lib/*
+build/*
+examples/*
 
 # Modules
 node_modules
