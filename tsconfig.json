@@ -19,11 +19,11 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": true,
     "typeRoots": ["./node_modules/@types"],
-    "rootDir": "src",
+    "rootDir": "packages",
     "outDir": "lib",
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["src"],
+  "include": ["packages"],
   "exclude": ["**/__tests__"]
 }
