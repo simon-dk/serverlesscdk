@@ -1,4 +1,4 @@
-import { App, Stack, Construct } from "../";
+import { App, Stack, Construct } from "..";
 // import { Custom } from "../sls-custom";
 // import { Plugins } from "../sls-plugins";
 
