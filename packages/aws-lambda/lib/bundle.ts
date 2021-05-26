@@ -2,14 +2,12 @@
 import { buildSync } from "esbuild";
 
 export class Bundling {
-  private currentWorkingDir: string;
-  private buildName: string;
-  private output: string;
+  private readonly currentWorkingDir: string;
+  private readonly output: string;
+  public readonly buildName: string;
   public readonly handlerPath: string;
 
   constructor(file: string, functionName: string, handler: string) {
-    // const cwd = process.cwd();
-
     console.time(`Built ${functionName} in`);
 
     this.currentWorkingDir = process.cwd();
@@ -32,6 +30,7 @@ export class Bundling {
       console.log(error.message);
       console.log(this.currentWorkingDir);
       console.log(this.output);
+      throw Error("");
     }
   }
 }

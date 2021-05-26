@@ -16,7 +16,6 @@ class TestResource extends BaseResource {
 
 test("BaseResourse Synth", () => {
   const resource = new TestResource();
-  console.log(resource.synth());
   expect(resource.synth()._secret).toBe(undefined);
   expect(resource.synth().name).toBe("Simon");
 });

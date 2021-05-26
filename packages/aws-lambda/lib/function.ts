@@ -116,10 +116,15 @@ export class Function extends Resource implements IFunction {
     this.destinations = props.destinations;
     this.events = props.events;
     this.image = props.image;
+    this.handler = props.handler;
 
-    this.handler = props.entryfile
-      ? (this.handler = this.bundleCode(props.entryfile, id, props.handler))
-      : props.handler;
+    const shouldBundle = props.entryfile !== undefined;
+
+    if (shouldBundle) {
+      const bundle = this.bundleCode(props.entryfile, id, props.handler);
+      this.handler = bundle.handlerPath;
+      this.package = this.package || { individually: true, patterns: [bundle.buildName] };
+    }
 
     if (props.runtime?.includes("nodejs")) {
       this.addEnvironment("AWS_NODEJS_CONNECTION_REUSE_ENABLED", "1");
@@ -131,15 +136,17 @@ export class Function extends Resource implements IFunction {
     return this;
   }
 
-  private bundleCode(file: string, functionName: string, handler: string) {
+  private bundleCode(file: string = "", functionName: string, handler: string) {
     //#Todo make further validation
     const bundle = new Bundling(file, functionName, handler);
-    if (this.package?.individually === false) {
+
+    if (this.package?.individually !== true) {
       console.log(
         "You should consider packaging functions individually and using patterns when bundling with esbuild."
       );
     }
-    return bundle.handlerPath;
+
+    return bundle;
   }
 
   synth() {

@@ -25,4 +25,15 @@ describe("Lambda Unit Tests", () => {
     expect("mylambdaLambdaFunction" in lambda.synth().functions).toBe(false);
     expect(lambda.logicalId).toBe("mylambdaLambdaFunction");
   });
+
+  test("Bundling", () => {
+    const app = new App();
+    const stack = new Stack(app, "mystack");
+    const lambda = new Function(stack, "mylambda", {
+      runtime: "nodejs14.x",
+      handler: "handler",
+      entryfile: __dirname + "/testlambda.ts",
+    });
+    console.log(lambda.synth());
+  });
 });
