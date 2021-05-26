@@ -118,12 +118,12 @@ export class Function extends Resource implements IFunction {
     this.image = props.image;
     this.handler = props.handler;
 
-    const shouldBundle = props.entryfile !== undefined;
-
-    if (shouldBundle) {
-      const bundle = this.bundleCode(props.entryfile, id, props.handler);
-      this.handler = bundle.handlerPath;
-      this.package = this.package || { individually: true, patterns: [bundle.buildName] };
+    if (props.entryfile) {
+      const { buildName, handlerPath } = this.bundleCode(props.entryfile, id, props.handler);
+      //Create or use existing package pattern and push buildName to patterns
+      this.package = this.package || { individually: true, patterns: [] };
+      this.package.patterns?.push(buildName);
+      this.handler = handlerPath;
     }
 
     if (props.runtime?.includes("nodejs")) {
@@ -131,22 +131,14 @@ export class Function extends Resource implements IFunction {
     }
   }
 
+  private bundleCode(file: string, functionName: string, handler: string) {
+    //#Todo make further validation
+    return new Bundling(file, functionName, handler);
+  }
+
   public addEnvironment(key: string, value: string) {
     this.environment[key] = value;
     return this;
-  }
-
-  private bundleCode(file: string = "", functionName: string, handler: string) {
-    //#Todo make further validation
-    const bundle = new Bundling(file, functionName, handler);
-
-    if (this.package?.individually !== true) {
-      console.log(
-        "You should consider packaging functions individually and using patterns when bundling with esbuild."
-      );
-    }
-
-    return bundle;
   }
 
   synth() {
