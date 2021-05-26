@@ -20,7 +20,8 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": true,
     "typeRoots": ["./node_modules/@types"],
-    "rootDir": "packages",
+    // "rootDir": "packages",
+    "rootDir": ".",
     "outDir": "lib",
     "resolveJsonModule": true,
     "skipLibCheck": true
