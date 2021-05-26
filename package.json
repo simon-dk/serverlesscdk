@@ -1,6 +1,6 @@
 {
   "name": "serverless-cdk",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": false,
   "main": "lib/index.js",
   "author": "Simon Saxtorph",
