@@ -1,5 +1,5 @@
-import { Construct, Resource } from "../..";
-import { Bundling } from "./bundle";
+import { Construct, Resource, Provider } from "../..";
+import { Bundling, BundlingOptions } from "./bundle";
 
 type Tags = any;
 type securityGroupIds = string[];
@@ -60,6 +60,7 @@ export interface FunctionProps {
   image?: string;
   handler: string;
   entryfile?: string;
+  bundlingOptions?: BundlingOptions;
 }
 
 export class Function extends Resource implements IFunction {
@@ -119,7 +120,11 @@ export class Function extends Resource implements IFunction {
     this.handler = props.handler;
 
     if (props.entryfile) {
-      const { buildName, handlerPath } = this.bundleCode(props.entryfile, id, props.handler);
+      // console.log(scope.node.findAll().filter((child) => child.node.id === "custom.provider"));
+      const { buildName, handlerPath } = this.bundleCode(props.entryfile, id, props.handler, {
+        ...props.bundlingOptions,
+        target: props.runtime || this.getProviderRuntime(scope),
+      });
       //Create or use existing package pattern and push buildName to patterns
       this.package = this.package || { individually: true, patterns: [] };
       this.package.patterns?.push(buildName);
@@ -131,9 +136,25 @@ export class Function extends Resource implements IFunction {
     }
   }
 
-  private bundleCode(file: string, functionName: string, handler: string) {
+  private getProviderRuntime(scope: Construct) {
+    try {
+      const providerNode = scope.node.findChild("custom.provider") as Provider;
+      return providerNode.runtime;
+    } catch (error) {
+      throw new Error(
+        "Could not extract a node runtime as there is no provider in the stack and runtime is not configured on the function."
+      );
+    }
+  }
+
+  private bundleCode(
+    entryFile: string,
+    functionName: string,
+    handler: string,
+    bundlingOptions?: BundlingOptions
+  ) {
     //#Todo make further validation
-    return new Bundling(file, functionName, handler);
+    return new Bundling(entryFile, functionName, handler, bundlingOptions);
   }
 
   public addEnvironment(key: string, value: string) {

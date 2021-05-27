@@ -1,4 +1,4 @@
-import { App, Stack } from "../..";
+import { App, Stack, Provider } from "../..";
 import { Function } from "..";
 
 describe("Lambda Unit Tests", () => {
@@ -25,8 +25,10 @@ describe("Lambda Unit Tests", () => {
     expect("mylambdaLambdaFunction" in lambda.synth().functions).toBe(false);
     expect(lambda.logicalId).toBe("mylambdaLambdaFunction");
   });
+});
 
-  test("Bundling", () => {
+describe("Lambda Bundling unit tests", () => {
+  test("Bundling with runtime should succeed", () => {
     const app = new App();
     const stack = new Stack(app, "mystack");
     const lambda = new Function(stack, "mylambda", {
@@ -34,6 +36,42 @@ describe("Lambda Unit Tests", () => {
       handler: "handler",
       entryfile: __dirname + "/testlambda.ts",
     });
-    console.log(lambda.synth());
+
+    expect(lambda.handler.includes("mylambda/index.handler")).toBe(true);
+  });
+
+  test("Bundling with provider should succeed", () => {
+    const app = new App();
+    const stack = new Stack(app, "mystack");
+    new Provider(stack, { runtime: "nodejs12.x" });
+    const lambda = new Function(stack, "mylambda", {
+      handler: "handler",
+      entryfile: __dirname + "/testlambda.ts",
+    });
+
+    expect(lambda.handler.includes("mylambda/index.handler")).toBe(true);
+  });
+
+  test("Bundling with provider with wrong runtime should fail", () => {
+    expect(() => {
+      const app = new App();
+      const stack = new Stack(app, "mystack");
+      new Provider(stack, { runtime: "golang" });
+      new Function(stack, "mylambda", {
+        handler: "handler",
+        entryfile: __dirname + "/testlambda.ts",
+      });
+    }).toThrowError("Cannot extract node-version from runtime.");
+  });
+
+  test("Bundling without provider and runtime should fail", () => {
+    expect(() => {
+      const app = new App();
+      const stack = new Stack(app, "mystack");
+      new Function(stack, "mylambda", {
+        handler: "handler",
+        entryfile: __dirname + "/testlambda.ts",
+      });
+    }).toThrowError();
   });
 });
