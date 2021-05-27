@@ -92,7 +92,7 @@ export class Function extends Resource implements IFunction {
   private readonly _serverlessId: string;
 
   constructor(scope: Construct, id: string, props: FunctionProps) {
-    const logicalId = `${id}LambdaFunction`;
+    const logicalId = Function.buildLogicalId(id, "LambdaFunction");
     super(scope, logicalId);
 
     this._serverlessId = id;

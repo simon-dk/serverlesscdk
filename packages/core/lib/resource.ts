@@ -2,6 +2,12 @@ import { Fn } from "./fn";
 import { Construct } from "./constructor";
 
 export abstract class BaseResource extends Construct {
+  static buildLogicalId(id: string, appendString: string = "") {
+    const logicalId = id.replace("_", "Underscore").replace("-", "Dash");
+    const upperCaseLogicalId = logicalId.charAt(0).toUpperCase() + logicalId.slice(1);
+    return `${upperCaseLogicalId}${appendString}`;
+  }
+
   protected static validateObject(object: unknown) {
     if (typeof object !== "object") {
       throw new Error("Could not validate because input was not an object");
@@ -16,7 +22,7 @@ export abstract class BaseResource extends Construct {
     const validatedObject = BaseResource.validateObject(object);
 
     return Object.keys(validatedObject).filter((key) => {
-      // Dont return keys for "node" object or private properties, e.g. starting with "_MyObject": {} 
+      // Dont return keys for "node" object or private properties, e.g. starting with "_MyObject": {}
       if (key === "node") return false;
       if (key.slice(0, 1) === "_") return false;
       const checkForNullValues = validatedObject[key] != null;
