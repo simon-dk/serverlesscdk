@@ -64,6 +64,12 @@ export interface FunctionProps {
 }
 
 export class Function extends Resource implements IFunction {
+  private static buildLogicalId(id: string) {
+    const logicalId = id.replace("_", "Underscore").replace("-", "Dash");
+    const upperCaseLogicalId = logicalId.charAt(0).toUpperCase() + logicalId.slice(1);
+    return `${upperCaseLogicalId}LambdaFunction`;
+  }
+
   public readonly name?: string;
   public readonly description?: string;
   public readonly memorySize?: number | string;
@@ -92,7 +98,7 @@ export class Function extends Resource implements IFunction {
   private readonly _serverlessId: string;
 
   constructor(scope: Construct, id: string, props: FunctionProps) {
-    const logicalId = `${id}LambdaFunction`;
+    const logicalId = Function.buildLogicalId(id);
     super(scope, logicalId);
 
     this._serverlessId = id;

@@ -23,7 +23,18 @@ describe("Lambda Unit Tests", () => {
 
     expect("mylambda" in lambda.synth().functions).toBe(true);
     expect("mylambdaLambdaFunction" in lambda.synth().functions).toBe(false);
-    expect(lambda.logicalId).toBe("mylambdaLambdaFunction");
+    expect(lambda.logicalId).toBe("MylambdaLambdaFunction");
+  });
+
+  test("LogicalId should be formatted correctly", () => {
+    const app = new App();
+    const stack = new Stack(app, "mystack");
+    const lambda = new Function(stack, "my-get_User", {
+      runtime: "nodejs14.x",
+      handler: "custom/handler",
+    });
+
+    expect(lambda.logicalId).toBe("MyDashgetUnderscoreUserLambdaFunction");
   });
 });
 
