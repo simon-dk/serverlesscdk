@@ -1,4 +1,4 @@
-import { Construct, BaseResource, Region } from "../..";
+import { Stack, BaseResource, Region } from "../..";
 import { PolicyStatement } from "../../aws-iam";
 import {
   DeploymentBucket,
@@ -25,7 +25,47 @@ export interface ProviderProps {
   kmsKeyArn?: string; //arn:aws:kms:us-east-1:XXXXXX:key/some-hash # KMS key arn which will be used for encryption for all functions
 }
 
+// export enum RetentionDays {
+//   ONE_DAY = 1,
+//   THREE_DAYS = 3,
+//   FIVE_DAYS = 5,
+//   ONE_WEEK = 7,
+//   TWO_WEEKS = 14,
+//   ONE_MONTH = 30,
+//   TWO_MONTHS = 60,
+//   THREE_MONTHS = 90,
+//   FOUR_MONTHS = 120,
+//   FIVE_MONTHS = 150,
+//   SIX_MONTHS = 180,
+//   ONE_YEAR = 365,
+//   THIRTEEN_MONTHS = 400,
+//   EIGHTEEN_MONTHS = 545,
+//   TWO_YEARS = 731,
+//   FIVE_YEARS = 1827,
+//   TEN_YEARS = 3653,
+// }
+
 export class Provider extends BaseResource {
+  // static RetentionDays = {
+  //   ONE_DAY: 1,
+  //   THREE_DAYS: 3,
+  //   FIVE_DAYS: 5,
+  //   ONE_WEEK: 7,
+  //   TWO_WEEKS: 14,
+  //   ONE_MONTH: 30,
+  //   TWO_MONTHS: 60,
+  //   THREE_MONTHS: 90,
+  //   FOUR_MONTHS: 120,
+  //   FIVE_MONTHS: 150,
+  //   SIX_MONTHS: 180,
+  //   ONE_YEAR: 365,
+  //   THIRTEEN_MONTHS: 400,
+  //   EIGHTEEN_MONTHS: 545,
+  //   TWO_YEARS: 731,
+  //   FIVE_YEARS: 1827,
+  //   TEN_YEARS: 3653,
+  // };
+
   public readonly name: string;
   public readonly runtime: string;
   public readonly stage: string;
@@ -50,18 +90,18 @@ export class Provider extends BaseResource {
   // More Info: https://www.serverless.com/framework/docs/deprecations/#LAMBDA_HASHING_VERSION_V2
   public readonly lambdaHashingVersion = "20201221";
 
-  constructor(scope: Construct, props: ProviderProps = {}) {
+  constructor(scope: Stack, props: ProviderProps = {}) {
     super(scope, "custom.provider");
 
     this.name = props.name || "aws";
     this.runtime = props.runtime || "nodejs14.x";
-    this.stage = props.stage || "${opt:stage, 'dev'}";
-    this.region = props.region || Region.US_EAST_1;
+    this.stage = scope.env.stage || props.stage || "${opt:stage, 'dev'}";
+    this.region = scope.env.region || props.region || Region.US_EAST_1;
     this.stackName = props.stackName;
     this.apiName = props.apiName;
     this.websocketsApiName = props.websocketsApiName;
     this.websocketsApiRouteSelectionExpression = props.websocketsApiRouteSelectionExpression;
-    this.profile = props.profile;
+    this.profile = scope.env.profile || props.profile;
     this.memorySize = props.memorySize;
     this.timeout = props.timeout;
     this.logRetentionInDays = props.logRetentionInDays;
