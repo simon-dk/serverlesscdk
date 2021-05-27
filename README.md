@@ -8,8 +8,8 @@ This framework as a work in progress and should not be used in production, yet. 
 
 ## Why is this neccesary
 
-AWS CDK is an amazing software suite. But it is also very complex, and althoug it is extremely usefull for settin up general infrastricture like VPC, databases etc., creating and deploying Serverless infrastructure is often slow and cumbersome.
-Serverless Framework on the other hand has ALMOST perfected the way we create Serverless systems. With quick deployments and sane defaults to many services. But Serverless Framework is limited. Writing stacks in yml is dreadfull for many,
+AWS CDK is an amazing software suite. But it is also very complex, and althoug it is extremely useful for setting up general infrastructure like VPC, databases etc., creating and deploying Serverless infrastructure is often slow and cumbersome.
+Serverless Framework on the other hand has almost perfected the way we create Serverless systems with quick deployments and sane defaults to many services. But Serverless Framework is limited. Writing stacks in yml is dreadfull for many,
 and although serverless can handle .js and .ts files, you dont get much help or typesafety out of the box. ServerlessCDK is a way for developers to create Stacks using Serverless Framework, but written with reusable constructs, just like CDK.
 
 For lambda function we use esbundle for an easy build/deploy workflow.
