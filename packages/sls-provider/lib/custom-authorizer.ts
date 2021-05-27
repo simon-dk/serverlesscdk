@@ -1,8 +1,8 @@
-import { Construct, BaseResource } from "../../";
+import { Construct, BaseResource, FnGetAtt } from "../../";
 
 export interface CustomLambdaAuthorizerProps {
   functionName?: string;
-  functionArn?: string;
+  functionArn?: string | FnGetAtt;
   name?: string;
   resultTtlInSeconds?: number;
   enableSimpleResponses?: boolean;
@@ -14,7 +14,7 @@ export interface CustomLambdaAuthorizerProps {
 export interface ICustomLambdaAuthorizer {
   type: "request";
   functionName?: string;
-  functionArn?: string;
+  functionArn?: string | FnGetAtt;
   name?: string;
   resultTtlInSeconds?: number;
   enableSimpleResponses?: boolean;
@@ -30,7 +30,7 @@ export class CustomLambdaAuthorizer extends BaseResource implements ICustomLambd
     if (ttl < 0) throw new Error(`TTL cannot be less than 0, got ${ttl}`);
   }
 
-  private static validateFunctionReference(name?: string, arn?: string): void {
+  private static validateFunctionReference(name?: string, arn?: string | FnGetAtt): void {
     if (name && arn)
       throw new Error(
         "You can only supply a name OR an arn for an existing custom authorizer, but supplied both."
@@ -40,7 +40,7 @@ export class CustomLambdaAuthorizer extends BaseResource implements ICustomLambd
   #logicalId: string;
   type: "request";
   functionName?: string;
-  functionArn?: string;
+  functionArn?: string | FnGetAtt;
   name?: string;
   resultTtlInSeconds?: number;
   enableSimpleResponses?: boolean;
