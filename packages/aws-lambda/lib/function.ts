@@ -1,5 +1,5 @@
-import { Construct, Resource } from "../..";
-import { Bundling } from "./bundle";
+import { Construct, Resource, Provider } from "../..";
+import { Bundling, BundlingOptions } from "./bundle";
 
 type Tags = any;
 type securityGroupIds = string[];
@@ -60,6 +60,7 @@ export interface FunctionProps {
   image?: string;
   handler: string;
   entryfile?: string;
+  bundlingOptions?: BundlingOptions;
 }
 
 export class Function extends Resource implements IFunction {
@@ -86,10 +87,15 @@ export class Function extends Resource implements IFunction {
   public readonly image?: string;
   public readonly handler: string;
 
-  constructor(scope: Construct, id: string, props: FunctionProps) {
-    id = `${id}LambdaFunction`;
-    super(scope, id);
+  // Because Serverless appends "LambdaFunction" to all names, we save the
+  // original Id as a private property.
+  private readonly _serverlessId: string;
 
+  constructor(scope: Construct, id: string, props: FunctionProps) {
+    const logicalId = `${id}LambdaFunction`;
+    super(scope, logicalId);
+
+    this._serverlessId = id;
     this.name = props.name; //does this conflict with id?
     this.description = props.description;
     this.memorySize = props.memorySize;
@@ -111,14 +117,44 @@ export class Function extends Resource implements IFunction {
     this.destinations = props.destinations;
     this.events = props.events;
     this.image = props.image;
+    this.handler = props.handler;
 
-    this.handler = props.entryfile
-      ? (this.handler = this.bundleCode(props.entryfile, id, props.handler))
-      : props.handler;
+    if (props.entryfile) {
+      // console.log(scope.node.findAll().filter((child) => child.node.id === "custom.provider"));
+      const { buildName, handlerPath } = this.bundleCode(props.entryfile, id, props.handler, {
+        ...props.bundlingOptions,
+        target: props.runtime || this.getProviderRuntime(scope),
+      });
+      //Create or use existing package pattern and push buildName to patterns
+      this.package = this.package || { individually: true, patterns: [] };
+      this.package.patterns?.push(buildName);
+      this.handler = handlerPath;
+    }
 
     if (props.runtime?.includes("nodejs")) {
       this.addEnvironment("AWS_NODEJS_CONNECTION_REUSE_ENABLED", "1");
     }
+  }
+
+  private getProviderRuntime(scope: Construct) {
+    try {
+      const providerNode = scope.node.findChild("custom.provider") as Provider;
+      return providerNode.runtime;
+    } catch (error) {
+      throw new Error(
+        "Could not extract a node runtime as there is no provider in the stack and runtime is not configured on the function."
+      );
+    }
+  }
+
+  private bundleCode(
+    entryFile: string,
+    functionName: string,
+    handler: string,
+    bundlingOptions?: BundlingOptions
+  ) {
+    //#Todo make further validation
+    return new Bundling(entryFile, functionName, handler, bundlingOptions);
   }
 
   public addEnvironment(key: string, value: string) {
@@ -126,18 +162,8 @@ export class Function extends Resource implements IFunction {
     return this;
   }
 
-  private bundleCode(file: string, functionName: string, handler: string) {
-    //#Todo make further validation
-    const bundle = new Bundling(file, functionName, handler);
-    if (this.package?.individually === false) {
-      console.log(
-        "You should consider packaging functions individually and using patterns when bundling with esbuild."
-      );
-    }
-    return bundle.handlerPath;
-  }
-
   synth() {
-    return { functions: { [this.logicalId]: this.synthResource() } };
+    //We use _serverlessId to avoid functions named "getUserLambdaFunctionLambdaFunction"
+    return { functions: { [this._serverlessId]: this.synthResource() } };
   }
 }
