@@ -35,9 +35,26 @@ describe("Lambda Bundling unit tests", () => {
       runtime: "nodejs14.x",
       handler: "handler",
       entryfile: __dirname + "/testlambda.ts",
+      package: { patterns: ["node_modules"] },
     });
 
     expect(lambda.handler.includes("mylambda/index.handler")).toBe(true);
+  });
+
+  test("Bundling should return a package with pattern ", () => {
+    const app = new App();
+    const stack = new Stack(app, "mystack");
+    const lambda = new Function(stack, "mylambda", {
+      runtime: "nodejs14.x",
+      handler: "handler",
+      entryfile: __dirname + "/testlambda.ts",
+      package: { patterns: ["node_modules"] },
+    });
+
+    const patterns = lambda?.package?.patterns as any;
+
+    expect(patterns[0]).toBe("node_modules");
+    expect(patterns[1]).toBe("build/mylambda/index.js");
   });
 
   test("Bundling with provider should succeed", () => {
