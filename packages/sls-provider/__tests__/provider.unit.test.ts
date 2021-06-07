@@ -47,22 +47,37 @@ describe("Custom Authorizer unit tests", () => {
   });
 });
 
-// describe("Jwt auth unit-test", () => {
-//   let app;
-//   let stack;
-//   beforeEach(() => {
-//     app = new App();
-//     stack = new Stack(app, "my-stack");
-//   });
+describe("Jwt auth unit-test", () => {
+  let app: any;
+  let stack: any;
 
-//   test("if jwt is created", () => {
-//     const auth = new JwtAuthorizer(stack, "myAuth", {
-//       audience: ["admin"],
-//       issuerUrl: "https://google.com",
-//     });
+  beforeEach(() => {
+    app = new App();
+    stack = new Stack(app, "my-stack");
+  });
 
-//     console.log(auth.synth());
+  test("if default jwt is created", () => {
+    const auth = new JwtAuthorizer(stack, "myAuth", {
+      audience: ["admin"],
+      issuerUrl: "https://google.com",
+    }).synth();
 
-//     expect(1).toBe(1);
-//   });
-// });
+    expect(auth.provider.httpApi.authorizers.myAuth.identitySource).toBe(
+      "$request.header.Authorization"
+    );
+    expect(auth.provider.httpApi.authorizers.myAuth.audience.length).toBe(1);
+    expect(auth.provider.httpApi.authorizers.myAuth.issuerUrl).toBe("https://google.com");
+  });
+
+  test("if identity source is created", () => {
+    const auth = new JwtAuthorizer(stack, "myAuth", {
+      audience: ["admin", "users"],
+      issuerUrl: "https://google.com",
+      identitySource: "$request.header.Token",
+    }).synth();
+
+    expect(auth.provider.httpApi.authorizers.myAuth.identitySource).toBe("$request.header.Token");
+    expect(auth.provider.httpApi.authorizers.myAuth.audience.length).toBe(2);
+    expect(auth.provider.httpApi.authorizers.myAuth.issuerUrl).toBe("https://google.com");
+  });
+});
