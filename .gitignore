@@ -10,3 +10,7 @@ node_modules
 
 # Random files
 .DS_Store
+
+# Serverless folders
+.serverless
+build
