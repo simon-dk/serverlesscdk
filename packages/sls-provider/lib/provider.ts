@@ -95,13 +95,13 @@ export class Provider extends BaseResource {
 
     this.name = props.name || "aws";
     this.runtime = props.runtime || "nodejs14.x";
-    this.stage = scope.env.stage || props.stage || "${opt:stage, 'dev'}";
-    this.region = scope.env.region || props.region || Region.US_EAST_1;
+    this.stage = scope.env?.stage || props.stage || "${opt:stage, 'dev'}";
+    this.region = scope.env?.region || props.region || Region.US_EAST_1;
     this.stackName = props.stackName;
     this.apiName = props.apiName;
     this.websocketsApiName = props.websocketsApiName;
     this.websocketsApiRouteSelectionExpression = props.websocketsApiRouteSelectionExpression;
-    this.profile = scope.env.profile || props.profile;
+    this.profile = scope.env?.profile || props.profile;
     this.memorySize = props.memorySize;
     this.timeout = props.timeout;
     this.logRetentionInDays = props.logRetentionInDays;

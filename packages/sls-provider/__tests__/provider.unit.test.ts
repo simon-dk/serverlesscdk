@@ -1,4 +1,4 @@
-import { CustomLambdaAuthorizer } from "..";
+import { CustomLambdaAuthorizer, JwtAuthorizer } from "..";
 import { App, Stack } from "../..";
 import { Function } from "../../aws-lambda";
 
@@ -46,3 +46,23 @@ describe("Custom Authorizer unit tests", () => {
     });
   });
 });
+
+// describe("Jwt auth unit-test", () => {
+//   let app;
+//   let stack;
+//   beforeEach(() => {
+//     app = new App();
+//     stack = new Stack(app, "my-stack");
+//   });
+
+//   test("if jwt is created", () => {
+//     const auth = new JwtAuthorizer(stack, "myAuth", {
+//       audience: ["admin"],
+//       issuerUrl: "https://google.com",
+//     });
+
+//     console.log(auth.synth());
+
+//     expect(1).toBe(1);
+//   });
+// });

@@ -25,7 +25,7 @@ export interface StackProps {
 export class Stack extends Construct {
   public readonly service: string;
   public readonly frameworkVersion: "2";
-  public readonly env: any;
+  public readonly env?: Environment;
 
   constructor(scope: Construct, id: string, props: StackProps = {}) {
     super(scope, id);
