@@ -1,6 +1,5 @@
-import { App, Stack, StackProps, Construct } from "../../";
-import { Provider, Custom, HttpApi, CustomLambdaAuthorizer, JwtAuthorizer } from "../../";
-import { aws_lambda as lambda } from "../../";
+import { App, Stack, StackProps, Construct, Custom, Provider } from "../../";
+import { aws_lambda as lambda, aws_apigatewayv2 as apigw } from "../../";
 
 class RandomStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -12,15 +11,15 @@ class RandomStack extends Stack {
       handler: "auth",
     });
 
-    new HttpApi(this, { cors: false });
+    new apigw.HttpApi(this, { cors: false });
     new Custom(this, { key: { value: { nested: "val" } } });
 
-    new JwtAuthorizer(this, "JwtAuth", {
+    new apigw.HttpJwtAuthorizer(this, "JwtAuth", {
       audience: [""],
       issuerUrl: "",
     });
 
-    new CustomLambdaAuthorizer(this, "CustomAuthorizer", {
+    new apigw.HttpLambdaAuthorizer(this, "CustomAuthorizer", {
       functionArn: authLambda.arn,
       enableSimpleResponses: true,
     });
