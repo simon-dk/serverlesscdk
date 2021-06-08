@@ -1,7 +1,7 @@
-import { Construct, Resource, FnGetAtt } from "../../";
-import { Function } from "../../aws-lambda";
+import { Construct, Resource, FnGetAtt } from "../../..";
+import { Function } from "../../../aws-lambda";
 
-export interface CustomLambdaAuthorizerProps {
+export interface HttpLambdaAuthorizerProps {
   functionName?: string;
   functionArn?: string | FnGetAtt;
   name?: string;
@@ -12,7 +12,7 @@ export interface CustomLambdaAuthorizerProps {
   managedExternally?: boolean;
 }
 
-export interface ICustomLambdaAuthorizer {
+export interface IHttpLambdaAuthorizer {
   type: "request";
   functionName?: string;
   functionArn?: string | FnGetAtt;
@@ -24,7 +24,7 @@ export interface ICustomLambdaAuthorizer {
   managedExternally?: boolean;
 }
 
-export class CustomLambdaAuthorizer extends Resource implements ICustomLambdaAuthorizer {
+export class HttpLambdaAuthorizer extends Resource implements IHttpLambdaAuthorizer {
   private static validateTtl(ttl?: number): void {
     if (!ttl) return;
     if (ttl > 3600) throw new Error(`Maximum TTL for custom authorizer is 3600 but got ${ttl}`);
@@ -50,14 +50,14 @@ export class CustomLambdaAuthorizer extends Resource implements ICustomLambdaAut
 
   private readonly _serverlessId: string;
 
-  constructor(scope: Construct, id: string, props: CustomLambdaAuthorizerProps = {}) {
-    const logicalId = `HttpApiAuthorizer${CustomLambdaAuthorizer.buildLogicalId(props.name || id)}`;
+  constructor(scope: Construct, id: string, props: HttpLambdaAuthorizerProps = {}) {
+    const logicalId = `HttpApiAuthorizer${HttpLambdaAuthorizer.buildLogicalId(props.name || id)}`;
     super(scope, logicalId);
 
     this._serverlessId = id;
 
-    CustomLambdaAuthorizer.validateTtl(props.resultTtlInSeconds);
-    CustomLambdaAuthorizer.validateFunctionReference(props.functionName, props.functionArn);
+    HttpLambdaAuthorizer.validateTtl(props.resultTtlInSeconds);
+    HttpLambdaAuthorizer.validateFunctionReference(props.functionName, props.functionArn);
 
     this.type = "request";
     this.functionName = props.functionName;

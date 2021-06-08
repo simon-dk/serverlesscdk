@@ -1,5 +1,5 @@
 import { App, Stack, StackProps, Construct } from "../../";
-import { Provider, Custom, HttpApi, CustomLambdaAuthorizer } from "../../";
+import { Provider, Custom, HttpApi, CustomLambdaAuthorizer, JwtAuthorizer } from "../../";
 import { aws_lambda as lambda } from "../../";
 
 class RandomStack extends Stack {
@@ -14,6 +14,12 @@ class RandomStack extends Stack {
 
     new HttpApi(this, { cors: false });
     new Custom(this, { key: { value: { nested: "val" } } });
+
+    new JwtAuthorizer(this, "JwtAuth", {
+      audience: [""],
+      issuerUrl: "",
+    });
+
     new CustomLambdaAuthorizer(this, "CustomAuthorizer", {
       functionArn: authLambda.arn,
       enableSimpleResponses: true,

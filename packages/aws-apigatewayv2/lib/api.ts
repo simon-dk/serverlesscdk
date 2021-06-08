@@ -1,5 +1,10 @@
-import { Construct, BaseResource } from "../../";
-import { CustomLambdaAuthorizer, CustomLambdaAuthorizerProps } from ".";
+import { Construct, BaseResource } from "../..";
+// import {
+//   HttpLambdaAuthorizer,
+//   HttpJwtAuthorizerProps,
+//   HttpLambdaAuthorizerProps,
+//   HttpJwtAuthorizer,
+// } from ".";
 
 export interface HttpApiProps {
   id?: string; // : 'my-id' # If we want to attach to externally created HTTP API its id should be provided here
@@ -29,10 +34,16 @@ export class HttpApi extends BaseResource implements IHttpApi {
     this.cors = props.cors || false;
   }
 
-  public addCustomAuthorizer(id: string, options: CustomLambdaAuthorizerProps) {
-    new CustomLambdaAuthorizer(this, id, options);
-    return this;
-  }
+  // Not implemented yet
+  // public addJwtAuthorizer(id: string, options: HttpJwtAuthorizerProps) {
+  //   new HttpJwtAuthorizer(this, id, options);
+  //   return this;
+  // }
+
+  // public addLambdaAuthorizer(id: string, options: HttpLambdaAuthorizerProps) {
+  //   new HttpLambdaAuthorizer(this, id, options);
+  //   return this;
+  // }
 
   synth() {
     return { provider: { httpApi: this.synthResource() } };

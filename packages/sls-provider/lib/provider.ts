@@ -1,13 +1,14 @@
 import { Stack, BaseResource, Region } from "../..";
 import { PolicyStatement } from "../../aws-iam";
 import {
-  DeploymentBucket,
-  DeploymentBucketProps,
   HttpApi,
   HttpApiProps,
-  CustomLambdaAuthorizer,
-  CustomLambdaAuthorizerProps,
-} from ".";
+  HttpJwtAuthorizer,
+  HttpJwtAuthorizerProps,
+  HttpLambdaAuthorizer,
+  HttpLambdaAuthorizerProps,
+} from "../../aws-apigatewayv2";
+import { DeploymentBucket, DeploymentBucketProps } from ".";
 
 export interface ProviderProps {
   name?: "aws";
@@ -132,8 +133,13 @@ export class Provider extends BaseResource {
     return this;
   }
 
-  public addCustomAuthorizer(id: string, options: CustomLambdaAuthorizerProps) {
-    new CustomLambdaAuthorizer(this, id, options);
+  public addLambdaAuthorizer(id: string, options: HttpLambdaAuthorizerProps) {
+    new HttpLambdaAuthorizer(this, id, options);
+    return this;
+  }
+
+  public addJwtAuthorizer(id: string, options: HttpJwtAuthorizerProps) {
+    new HttpJwtAuthorizer(this, id, options);
     return this;
   }
 

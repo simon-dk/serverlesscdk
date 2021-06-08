@@ -1,29 +1,29 @@
-import { Construct, Resource } from "../../";
+import { Construct, Resource } from "../../..";
 
-export interface JwtAuthorizerProps {
+export interface HttpJwtAuthorizerProps {
   readonly issuerUrl: string;
   readonly audience: string[];
   /**
    * @default $request.header.Authorization
    */
-  readonly identitySource?: string;
+  readonly identitySource?: string[];
 }
 
-export interface IJwtAuthorizer {
+export interface IHttpJwtAuthorizer {
   readonly issuerUrl: string;
   readonly audience: string[];
-  readonly identitySource: string;
+  readonly identitySource: string[];
 }
 
-export class JwtAuthorizer extends Resource implements IJwtAuthorizer {
+export class HttpJwtAuthorizer extends Resource implements IHttpJwtAuthorizer {
   public readonly issuerUrl: string;
   public readonly audience: string[];
-  public readonly identitySource: string;
+  public readonly identitySource: string[];
 
   private readonly _serverlessId: string;
 
-  constructor(scope: Construct, id: string, props: JwtAuthorizerProps) {
-    const logicalId = `HttpApiAuthorizer${JwtAuthorizer.buildLogicalId(id)}`;
+  constructor(scope: Construct, id: string, props: HttpJwtAuthorizerProps) {
+    const logicalId = `HttpApiAuthorizer${HttpJwtAuthorizer.buildLogicalId(id)}`;
     super(scope, logicalId);
 
     this._serverlessId = id;
@@ -32,11 +32,10 @@ export class JwtAuthorizer extends Resource implements IJwtAuthorizer {
     this.issuerUrl = props.issuerUrl;
     this.audience = props.audience;
 
-    this.identitySource = props.identitySource ?? "$request.header.Authorization";
+    this.identitySource = props.identitySource ?? ["$request.header.Authorization"];
   }
 
   public synth() {
-    console.log(this);
     return {
       provider: { httpApi: { authorizers: { [this._serverlessId]: this.synthResource() } } },
     };
