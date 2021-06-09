@@ -11,16 +11,16 @@ export interface PolicyStatementProps {
    */
   readonly effect?: Effect;
   readonly actions?: string[];
-  readonly notActions?: string | string[];
-  readonly resources?: string[];
+  // readonly notActions?: string | string[];
+  readonly resources?: any[];
 }
 
 export interface IPolicyStatement {
   readonly Effect: Effect;
   readonly Action: any[];
   readonly Resource: any[];
-  readonly NotAction: any[];
-  readonly NotResource: any[];
+  readonly NotAction?: any[];
+  readonly NotResource?: any[];
 }
 
 export enum Effect {
@@ -43,9 +43,9 @@ export class PolicyStatement implements IPolicyStatement {
 
   public readonly Effect: Effect;
   public readonly Action: any[] = [];
-  public readonly NotAction: any[] = [];
+  public readonly NotAction?: any[];
   public readonly Resource: any[] = [];
-  public readonly NotResource: any[] = [];
+  public readonly NotResource?: any[];
 
   constructor(props: PolicyStatementProps = {}) {
     this.Effect = props.effect || Effect.ALLOW;
@@ -54,7 +54,7 @@ export class PolicyStatement implements IPolicyStatement {
   }
 
   public addActions(...actions: string[]) {
-    if (actions.length > 0 && this.NotAction.length > 0) {
+    if (actions.length > 0 && this.NotAction && this.NotAction.length > 0) {
       throw new Error("Cannot add 'Actions' to policy statement if 'NotActions' have been added");
     }
 
@@ -63,7 +63,7 @@ export class PolicyStatement implements IPolicyStatement {
   }
 
   public addResources(...arns: string[]) {
-    if (arns.length > 0 && this.NotResource.length > 0) {
+    if (arns.length > 0 && this.NotResource && this.NotResource.length > 0) {
       throw new Error(
         "Cannot add 'Resources' to policy statement if 'NotResources' have been added"
       );
