@@ -5,6 +5,8 @@
 // readonly notResources?: string[];
 // readonly conditions?: { [key: string]: any };
 
+
+
 export interface PolicyStatementProps {
   /**
    * @default Allow
