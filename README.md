@@ -1,3 +1,7 @@
+# Deprecated
+
+This repo has been deprecated.
+
 # serverlesscdk
 
 Create Serverless resources with a CDK-like framework
